@@ -9,10 +9,6 @@ If what the first statement makes no sense, this example might.
 	- Yeet (Main folder)
 		- Skeet (Folder that's going to be compressed)
 
-Stuff
-Stuff2.0
-
-
 Update-and-make:
 
 This is works by updating all directories which contain a .git folder, and then compiles every other folder in a directory.
@@ -22,7 +18,7 @@ As above follows, here's an example.
 Parent folder (In my case, Documents)
 
  - Update if .git is present
- - Compile with given statments
+ - Compile with given statements
  - Done :D
 
 TODO:
