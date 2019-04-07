@@ -6,15 +6,15 @@ Compress is a neat script I made that compresses all folders in a directory with
 If what the first statement makes no sense, this example might.
 
 Parent folder (In my case, Documents)
-|
-|
-+\ Yeet (Main folder)
- |
- |
- +\ Skeet (Folder that's going to be compressed)
-  |
-  | Stuff
-  | Stuff2.0
++
++
++- Yeet (Main folder)
+ =-
+ =-
+ =-- Skeet (Folder that's going to be compressed)
+  +=-
+  +=- Stuff
+  +=- Stuff2.0
 
 
 Update-and-make:
