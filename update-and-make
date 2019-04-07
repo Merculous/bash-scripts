@@ -1,0 +1,122 @@
+#!/bin/bash
+
+# This will update all directories than contain a .git folder
+
+function update {
+
+git=.git
+
+	for folder in *
+		do
+			if [ -d $folder ]; then
+				echo -e "\nChanging directory to: $folder"
+				cd $folder
+
+				if [ -d $git ]; then
+					echo -e ".git is present! Updating...\n"
+					git pull
+					cd ../
+				else
+					echo -e "$folder does not contain $git, skipping...\n"
+					cd ../
+				fi
+			fi
+	done
+}
+
+# This will execute ./autogen.sh and make the main program
+
+function autogen {
+
+auto=autogen.sh
+
+	for folder in *
+		do
+			if [ -d $folder ]; then
+				echo -e "\nChanging directory to: $folder"
+				cd $folder
+
+				if [ -f $auto ]; then
+					echo -e "$auto is present! Executing...\n"
+					./$auto && make && make install
+					cd ../
+				else
+					echo -e "$folder does not contain $auto, skipping...\n" 
+					cd ../
+				fi
+			fi
+	done
+}
+
+# Same functionality as autogen, except there's no autogen.sh file, but this is totally fine as autogen.sh executes configure files anyways 
+
+function configure {
+
+conf=configure
+confac=configure.ac
+
+	for folder in *
+		do
+			if [ -d $folder ]; then
+				echo -e "\nChanging directory to: $folder"
+				cd $folder
+
+				if [ -f 'autogen.sh' ]; then
+					echo "autogen.sh is present! Skipping...\n"
+					cd ../
+				elif [ -f $conf ]; then 
+					echo -e "$conf is present! Executing...\n"
+					./$conf && make && make install
+					cd ../
+				elif [ -f $confac ] && [ ! -f $conf ]; then # If ONLY configure.ac exists AND NOT configure, then execute ./configure.ac
+					echo -e "Only $confac is present! Executing...\n" 
+					chmod +x $confac && ./$confac && make && make install
+					cd ../
+				else
+					echo -e "$folder does not contain $conf or $confac, skipping...\n"
+					cd ../
+				fi
+			fi
+	done
+}
+
+# This ensures that autogen.sh and configure is not installed, only make is present.
+
+function automake {
+
+make=Makefile
+makeam=Makefile.am
+
+	for folder in *
+		do
+			if [ -d $folder ]; then
+				echo -e "\nChanging directory to: $folder"
+				cd $folder
+
+				if [ -f 'autogen.sh' ]; then
+					echo "autogen.sh is present! Skipping...\n"
+					cd ../
+				elif [ -f 'configure' ] || [ -f 'configure.ac' ]; then 
+					echo -e "Configure or configure.ac is present! Skipping...\n"
+					cd ../
+				elif [ -f $make ] || [ -f $makeam ]; then 
+					echo "Only $make or $makeam is present! Making...\n"
+					make && make install
+					cd ../
+				else
+					echo -e "$folder does not contain $make or $makeam, skipping...\n"
+					cd ../
+				fi
+			fi
+	done
+}
+
+echo -e "Updating...\n"
+update
+echo -e "Executing autogen...\n"
+autogen
+echo -e "Configuring...\n"
+configure
+echo -e "Making...\n"
+automake
+echo -e "Update-and-make made by @Vyce_Merculous. Tweet to him if you've enjoyed! Feedback will be great! Feel free to create pull requests!"
