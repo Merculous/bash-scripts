@@ -1,0 +1,18 @@
+#!/bin/bash
+
+for file in *.mp4 
+	do 
+		ffmpeg -i "$file" -c:v libx264 -preset slow -crf 15 -c:a copy -filter:v "scale='1280x720:flags=lanczos', minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=60'" "${file%.*}-converted.mp4"
+	done
+
+for file in *-converted.mp4
+	do 
+		mv -v "$file" "${file/-converted/}"
+done	
+
+# (NOTE: "-vf" and "-filter:v" are the same thing)
+
+# -filter:v "scale='1280:720', minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=60'"
+
+# The command above will ensure when converting any low fps video to 60fps, it will not duplicate the same frames to get the video to become '60fps.' 
+# Interpolation will blend the frames together to get rid of duplicating frames and give you the true framerate you want.
