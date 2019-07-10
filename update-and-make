@@ -68,7 +68,7 @@ confac=configure.ac
 					echo -e "$conf is present! Executing...\n"
 					./$conf && make && make install
 					cd ../
-				elif [ -f $confac ] && [ ! -f $conf ]; then # If ONLY configure.ac exists AND NOT configure, then give it exec perms and execute ./configure.ac
+				elif [ -f $confac ] && [ ! -f $conf ]; then # If ONLY configure.ac exists AND NOT configure, then execute ./configure.ac
 					echo -e "Only $confac is present! Executing...\n" 
 					chmod +x $confac && ./$confac && make && make install
 					cd ../
@@ -93,13 +93,13 @@ makeam=Makefile.am
 				echo -e "\nChanging directory to: $folder"
 				cd $folder
 
-				if [ -f 'autogen.sh' ]; then # We are checking that autogen is present, if so, make was already executed in the folder
+				if [ -f 'autogen.sh' ]; then
 					echo "autogen.sh is present! Skipping...\n"
 					cd ../
-				elif [ -f 'configure' ] || [ -f 'configure.ac' ]; then # If configure, is present, this is the same for autogen
+				elif [ -f 'configure' ] || [ -f 'configure.ac' ]; then 
 					echo -e "Configure or configure.ac is present! Skipping...\n"
 					cd ../
-				elif [ -f $make ] || [ -f $makeam ]; then # This ensures that autogen and or configure is not present, and that Makefile(.am) is the only present file(s)
+				elif [ -f $make ] || [ -f $makeam ]; then 
 					echo "Only $make or $makeam is present! Making...\n"
 					make && make install
 					cd ../
@@ -111,12 +111,34 @@ makeam=Makefile.am
 	done
 }
 
-echo -e "Updating...\n"
-update
-echo -e "Executing autogen...\n"
-autogen
-echo -e "Configuring...\n"
-configure
-echo -e "Making...\n"
-automake
-echo -e "Update-and-make made by @Vyce_Merculous."
+function usage {
+	echo -e "Usage: $0 <options>\n"
+	echo -e "\t-u Update only"
+	echo -e "\t-a Execute autogen and compile"
+	echo -e "\t-c Configure and compile"
+	echo -e "\t-m Compile with make only\n"
+}
+
+if [ -n $1 ]; then
+	usage
+fi
+
+if [ "$1" == "-u" ]; then
+	echo -e "Updating only!"
+	update
+fi
+
+if [ "$1" == "-a" ]; then
+	echo -e "Executing autogen and compiling!"
+	autogen
+fi
+
+if [ "$1" == "-c" ]; then
+	echo -e "Configuring and compiling!"
+	configure
+fi
+
+if [ "$1" == "-m" ]; then
+	echo -e "Executing make only!"
+	automake
+fi

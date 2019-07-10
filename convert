@@ -2,17 +2,11 @@
 
 for file in *.mp4 
 	do 
-		ffmpeg -i "$file" -c:v libx264 -preset slow -crf 15 -c:a copy -filter:v "scale='1280x720:flags=lanczos', minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=60'" "${file%.*}-converted.mp4"
+		ffmpeg -i "$file" -c:v libx264 -preset fast -x264opts nal-hrd=cbr:force-cfr=1 -b:v 10000k -minrate 10000k -maxrate 10000k -bufsize 170k -c:a copy -filter:v "scale='1280x720:flags=lanczos', minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=60'" -metadata comment=" " "${file%.*}-converted.mp4"
 	done
 
-for file in *-converted.mp4
-	do 
-		mv -v "$file" "${file/-converted/}"
-done	
+# -filter:v "scale='1280:720', minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=60'" (NOTE: "-vf" and "-filter:v" are the same thing)
 
-# (NOTE: "-vf" and "-filter:v" are the same thing)
+# This command will ensure when converting any lower fps to 60fps will not just increase the amount of duplicated frames, but also blending frames together instead of showing the same frame duplicated over.
 
-# -filter:v "scale='1280:720', minterpolate='mi_mode=mci:mc_mode=aobmc:vsbmc=1:fps=60'"
-
-# The command above will ensure when converting any low fps video to 60fps, it will not duplicate the same frames to get the video to become '60fps.' 
-# Interpolation will blend the frames together to get rid of duplicating frames and give you the true framerate you want.
+# In order to force constant bitrates, we need to turn off CRF. Add in -x264opts nal-hrd=cbr:force-cfr=1 -b:v 10000k -minrate 10000k -maxrate 10000k -bufsize 170k
