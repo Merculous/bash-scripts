@@ -119,7 +119,7 @@ function usage {
 	echo -e "\t-m Compile with make only\n"
 }
 
-if [ -n $1 ]; then
+if [ "$#" -ne 1 ]; then
 	usage
 fi
 
