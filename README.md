@@ -33,3 +33,12 @@ TODO:
 Obviously make update-and-make work faster. I've tried this already and had some progress but adding some other stuff made bash oof. I will update when I can!
 
 If you have any suggestions, and or fixes, etc., feel free to create an issue or fork my repo and create a pull request with given fixes/improvements.
+
+# tar_xz_pv
+
+NOTE: The binary "pv" is needed to handle the progress bar, and any other visual data.
+
+This script was just something to figure out how to work with stdin, stdout,
+stderr. I think I've learned a lot. I haven't looked into it much before, so I
+have some sort of understanding of how they work.
+
